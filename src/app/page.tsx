@@ -111,35 +111,30 @@ export default function Home() {
       </section>
 
       {/* Marquee */}
-      <div className="overflow-hidden border-b border-border bg-surface py-4">
-       <div className="marquee-track">
-        {[0, 1].map((dup) => (
-          <div key={dup} className="flex shrink-0 items-center">
-            {clients.concat(clients).map((c, i) =>
-              c.logo ? (
-                <span
-                  key={`${dup}-${c.name}-${i}`}
-                  className="flex items-center gap-8 whitespace-nowrap px-8"
-               >
-                  <Image
-                    src={c.logo}
-                    alt={c.name}
-                    width={160}
-                    height={48}
-                    className="h-9 w-auto object-contain"
-                  />
-                  <span className="h-1.5 w-1.5 bg-accent" />
-               </span>
-            ) : (
-            <span
-              key={`${dup}-${c.name}-${i}`}
-              className="flex items-center gap-8 whitespace-nowrap px-8 font-display text-lg font-extrabold uppercase tracking-tight text-muted-foreground"
-            >
-              {c.name}
-              <span className="h-1.5 w-1.5 bg-accent" />
+<div className="overflow-hidden border-b border-border bg-surface py-5">
+  <div className="marquee-track">
+    {[0, 1].map((dup) => (
+      <div key={dup} className="flex shrink-0 items-center">
+        {clients.concat(clients).map((c, i) => (
+          <span key={`${dup}-${c.name}-${i}`} className="flex shrink-0 items-center gap-6 px-4">
+            <span className="flex h-16 w-40 shrink-0 items-center justify-center border border-border bg-white px-4">
+              {c.logo ? (
+                <Image
+                  src={c.logo}
+                  alt={c.name}
+                  width={160}
+                  height={48}
+                  className="h-8 max-h-8 w-auto max-w-full object-contain"
+                />
+              ) : (
+                <span className="whitespace-nowrap font-display text-sm font-extrabold uppercase tracking-tight text-foreground/80">
+                  {c.name}
+                </span>
+              )}
             </span>
-          ),
-        )}
+            <span className="h-1.5 w-1.5 shrink-0 bg-accent" />
+          </span>
+        ))}
       </div>
     ))}
   </div>

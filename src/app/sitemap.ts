@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { products } from "@/lib/site-data";
 import { industriesDetail } from "@/lib/catalog";
-import { blogPosts } from "@/lib/blog-data";
 
 // Keep this in sync with `siteUrl` in src/app/layout.tsx.
 const siteUrl = "https://www.sonisonpackaging.in";
@@ -15,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/industries`, priority: 0.8 },
     { url: `${siteUrl}/configurator`, priority: 0.8 },
     { url: `${siteUrl}/resources`, priority: 0.7 },
-    { url: `${siteUrl}/blog`, priority: 0.7 },
+    { url: `${siteUrl}/blog`, priority: 0.6 },
     { url: `${siteUrl}/faq`, priority: 0.7 },
     { url: `${siteUrl}/contact`, priority: 0.7 },
   ];
@@ -30,10 +29,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((p) => ({
-    url: `${siteUrl}/blog/${p.slug}`,
-    priority: 0.6,
-  }));
-
-  return [...staticRoutes, ...productRoutes, ...industryRoutes, ...blogRoutes];
+  return [...staticRoutes, ...productRoutes, ...industryRoutes];
 }

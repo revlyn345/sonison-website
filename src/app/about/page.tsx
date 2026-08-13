@@ -112,30 +112,27 @@ export default function About() {
       <section className="ink-panel">
   <div className="mx-auto max-w-7xl px-6 py-16">
     <p className="eyebrow text-accent">Trusted by brands like</p>
-    <div className="mt-8 flex flex-wrap items-center gap-3">
-      {clients.map((c) =>
-        c.logo ? (
-          <span
-            key={c.name}
-            className="flex items-center border border-ink-border bg-white px-5 py-3"
-          >
+    <div className="mt-8 flex flex-wrap gap-3">
+      {clients.map((c) => (
+        <span
+          key={c.name}
+          className="flex h-16 w-40 items-center justify-center border border-ink-border bg-white px-4"
+        >
+          {c.logo ? (
             <Image
               src={c.logo}
               alt={c.name}
               width={160}
               height={48}
-              className="h-7 w-auto object-contain"
+              className="h-8 max-h-8 w-auto max-w-full object-contain"
             />
-          </span>
-        ) : (
-          <span
-            key={c.name}
-            className="border border-ink-border px-5 py-3 font-display text-sm font-extrabold uppercase tracking-tight text-ink-foreground"
-          >
-            {c.name}
-          </span>
-        ),
-      )}
+          ) : (
+            <span className="text-center font-display text-sm font-extrabold uppercase tracking-tight text-foreground">
+              {c.name}
+            </span>
+          )}
+        </span>
+      ))}
     </div>
   </div>
 </section>
