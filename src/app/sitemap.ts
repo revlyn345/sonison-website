@@ -3,7 +3,7 @@ import { products } from "@/lib/site-data";
 import { industriesDetail } from "@/lib/catalog";
 
 // Keep this in sync with `siteUrl` in src/app/layout.tsx.
-const siteUrl = "https://www.sonisonpackaging.in";
+const siteUrl = "https://www.sonisonpackaging.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [

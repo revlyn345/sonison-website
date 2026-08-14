@@ -28,7 +28,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 
-const siteUrl = "https://www.sonisonpackaging.in";
+const siteUrl = "https://www.sonisonpackaging.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
