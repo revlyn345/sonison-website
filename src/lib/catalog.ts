@@ -552,7 +552,7 @@ export const faqs = [
   },
   {
     q: "How is tape priced?",
-    a: "By weight, not by roll. Width × length × micron determines the film used, so a 48mm 65m 40 micron roll costs less than the same roll at 50 micron. Use the configurator for an indicative figure.",
+    a: "Per roll, on the exact size you order. Width × length × micron decides how much film goes into each roll, so a 48mm 65m 40 micron roll costs less than the same roll at 50 micron. Use the configurator for an indicative figure.",
   },
   {
     q: "Which micron should I use?",

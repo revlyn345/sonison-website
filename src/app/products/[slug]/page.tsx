@@ -5,7 +5,21 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { QuoteBand } from "@/components/site/QuoteBand";
 import { Reveal } from "@/components/site/Reveal";
+import { TapeDesignStudio } from "@/components/site/TapeDesignStudio";
 import { products } from "@/lib/site-data";
+import { productDetails } from "@/lib/product-detail";
+import { productScenarios } from "@/lib/product-scenarios";
+import {
+  Applications,
+  CompareTable,
+  DispatchStrip,
+  EnquiryCard,
+  InfoTable,
+  OrderSteps,
+  QuickFacts,
+  RequirementCalculator,
+  ScenarioFaqs,
+} from "@/components/site/product/ProductWidgets";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -37,6 +51,14 @@ export default async function ProductPage({ params }: Props) {
 
   const index = products.findIndex((p) => p.slug === product.slug);
   const next = products[(index + 1) % products.length]!;
+  const detail = productDetails[product.slug];
+  const allFaqs = [...(product.faqs ?? []), ...(detail?.buyerFaqs ?? [])];
+
+  const scenarioFaqEntries = (productScenarios[product.slug] ?? []).map((s) => ({
+    q: s.q,
+    a: `${s.a} Suggested specification: ${s.spec.map((r) => `${r.label}: ${r.value}`).join("; ")}.`,
+  }));
+  const structuredFaqs = [...allFaqs, ...scenarioFaqEntries];
 
   return (
     <main>
@@ -53,6 +75,22 @@ export default async function ProductPage({ params }: Props) {
           }),
         }}
       />
+      {structuredFaqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: structuredFaqs.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            }),
+          }}
+        />
+      )}
 
       <section className="ink-panel relative overflow-hidden">
         <div className="grid-lines absolute inset-0 opacity-35" aria-hidden />
@@ -72,6 +110,11 @@ export default async function ProductPage({ params }: Props) {
             <Image src={product.image} alt={product.name} className="h-full w-full object-cover" />
           </div>
         </div>
+        {detail && (
+          <div className="relative mx-auto max-w-7xl px-6 pb-16">
+            <QuickFacts detail={detail} />
+          </div>
+        )}
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
@@ -112,7 +155,6 @@ export default async function ProductPage({ params }: Props) {
 
             {product.specGroups.map((g) => (
               <div key={g.title} className="mt-8 border border-border bg-card shadow-card">
-                <div className="hazard-band h-1 w-full" />
                 <h3 className="px-8 pt-6 text-lg">{g.title}</h3>
                 <dl className="px-8 pb-6 pt-4">
                   {g.rows.map((r, i) => (
@@ -129,21 +171,132 @@ export default async function ProductPage({ params }: Props) {
                 </dl>
               </div>
             ))}
+
+            {detail && (
+              <div className="mt-8">
+                <EnquiryCard detail={detail} productName={product.name} />
+              </div>
+            )}
           </Reveal>
         </div>
       </section>
 
-      {product.faqs && (
+      {detail && (
+        <>
+          <section className="border-y border-border bg-surface">
+            <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+              <Reveal>
+                <p className="eyebrow text-accent">Applications</p>
+                <h2 className="mt-4 text-3xl md:text-5xl">Where buyers use it</h2>
+                <div className="mt-8">
+                  <Applications detail={detail} />
+                </div>
+              </Reveal>
+              <Reveal delay={80} className="mt-14">
+                <RequirementCalculator detail={detail} productName={product.name} />
+              </Reveal>
+            </div>
+          </section>
+
+          <section className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+            <Reveal>
+              <p className="eyebrow text-accent">Packing, freight &amp; terms</p>
+              <h2 className="mt-4 text-3xl md:text-5xl">Everything before the PO</h2>
+            </Reveal>
+            <div className="mt-10 grid gap-8 lg:grid-cols-2">
+              <Reveal>
+                <InfoTable title="Packing & dispatch" icon="packing" rows={detail.packing} />
+              </Reveal>
+              <Reveal delay={80}>
+                <InfoTable title="Commercial terms" icon="commercial" rows={detail.commercials} />
+              </Reveal>
+            </div>
+            <Reveal delay={120} className="mt-8">
+              <DispatchStrip />
+            </Reveal>
+          </section>
+
+          <section className="ink-panel">
+            <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+              <p className="eyebrow text-accent">How to order</p>
+              <h2 className="mt-4 text-3xl text-ink-foreground md:text-5xl">
+                Four steps from enquiry to dispatch
+              </h2>
+              <div className="mt-10">
+                <OrderSteps detail={detail} />
+              </div>
+            </div>
+          </section>
+
+          <section className="border-y border-border bg-surface">
+            <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+              <Reveal>
+                <p className="eyebrow text-accent">Advice by scenario</p>
+                <h2 className="mt-4 max-w-3xl text-3xl md:text-5xl">
+                  Tell us the situation, we&apos;ll tell you the spec
+                </h2>
+                <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                  Common cases we handle every week, pick the one closest to yours and see exactly
+                  what we would put on the invoice.
+                </p>
+                <div className="mt-10">
+                  <ScenarioFaqs slug={product.slug} productName={product.name} />
+                </div>
+              </Reveal>
+            </div>
+          </section>
+
+          {(product.slug === "coloured-tape" || product.slug === "printed-tape") && (
+            <section className="border-y border-border bg-surface">
+              <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+                <Reveal>
+                  <p className="eyebrow text-accent">Design studio</p>
+                  <h2 className="mt-4 max-w-3xl text-3xl md:text-5xl">
+                    See it on the carton before you order it
+                  </h2>
+                  <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                    Try shades, layouts and your own wordmark. Send the mock-up over and
+                    we&apos;ll price it and courier a proof roll.
+                  </p>
+                  <div className="mt-10">
+                    <TapeDesignStudio />
+                  </div>
+                </Reveal>
+              </div>
+            </section>
+          )}
+
+          <section className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+            <Reveal>
+              <p className="eyebrow text-accent">Compare</p>
+              <h2 className="mt-4 text-3xl md:text-5xl">How this sits in the range</h2>
+              <div className="mt-10">
+                <CompareTable currentSlug={product.slug} />
+              </div>
+            </Reveal>
+          </section>
+        </>
+      )}
+
+      {allFaqs.length > 0 && (
         <section className="border-y border-border bg-surface">
-          <div className="mx-auto max-w-7xl px-6 py-20">
+          <div className="mx-auto max-w-4xl px-6 py-20">
             <p className="eyebrow text-accent">FAQs</p>
             <h2 className="mt-4 text-3xl md:text-5xl">Frequently asked questions</h2>
-            <div className="mt-10 grid gap-px border border-border bg-border md:grid-cols-2">
-              {product.faqs.map((f) => (
-                <div key={f.q} className="bg-background p-8">
-                  <h3 className="text-lg">{f.q}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
-                </div>
+            <div className="mt-10 divide-y divide-border border-y border-border">
+              {allFaqs.map((f, i) => (
+                <Reveal key={f.q} delay={i * 40}>
+                  <details className="group py-6">
+                    <summary className="grid cursor-pointer list-none grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-4">
+                      <span className="font-mono text-xs text-accent">{String(i + 1).padStart(2, "0")}</span>
+                      <h3 className="min-w-0 text-lg md:text-xl">{f.q}</h3>
+                      <span className="mt-1 h-4 w-4 shrink-0 border-t-2 border-accent transition-transform group-open:rotate-180">
+                        <span className="block h-4 w-4 -translate-y-[9px] border-l-2 border-accent group-open:opacity-0" />
+                      </span>
+                    </summary>
+                    <p className="ml-9 mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                  </details>
+                </Reveal>
               ))}
             </div>
           </div>

@@ -43,7 +43,7 @@ export default function ResourcesPage() {
               Ranges cover the full production window. A firm datasheet for your exact gauge and
               width is issued with the quotation.
             </p>
-            <Link href="/configurator" className="mt-7 inline-flex items-center gap-2 font-bold text-accent">
+            <Link href="/resources/configurator" className="mt-7 inline-flex items-center gap-2 font-bold text-accent">
               Build a spec and price it <ArrowRight className="h-4 w-4" />
             </Link>
           </Reveal>

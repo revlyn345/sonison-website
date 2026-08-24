@@ -53,7 +53,7 @@ export function Footer() {
             <ul className="mt-5 space-y-3 text-sm text-ink-muted">
               {industriesDetail.map((i) => (
                 <li key={i.slug}>
-                  <Link href={`/industries/${i.slug}`} className="transition-colors hover:text-ink-foreground">
+                  <Link href={`/products/industries/${i.slug}`} className="transition-colors hover:text-ink-foreground">
                     {i.name}
                   </Link>
                 </li>
@@ -75,12 +75,17 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/quality" className="hover:text-ink-foreground">
+                <Link href="/designs" className="hover:text-ink-foreground">
+                  Design studio
+                </Link>
+              </li>
+              <li>
+                <Link href="/about/quality" className="hover:text-ink-foreground">
                   Quality & process
                 </Link>
               </li>
               <li>
-                <Link href="/configurator" className="hover:text-ink-foreground">
+                <Link href="/resources/configurator" className="hover:text-ink-foreground">
                   Spec configurator
                 </Link>
               </li>
@@ -95,7 +100,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="hover:text-ink-foreground">
+                <Link href="/resources/faq" className="hover:text-ink-foreground">
                   FAQs
                 </Link>
               </li>

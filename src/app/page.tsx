@@ -8,6 +8,9 @@ import { Counter } from "@/components/site/Counter";
 import { CaseStudies } from "@/components/site/CaseStudies";
 import { CertStrip } from "@/components/site/CertStrip";
 import { TapeConfigurator } from "@/components/site/TapeConfigurator";
+import { TapeFinder } from "@/components/site/TapeFinder";
+import { TapeDesignStudio } from "@/components/site/TapeDesignStudio";
+import { CallbackCard } from "@/components/site/CallbackCard";
 import heroImg from "@/assets/hero-line.jpg";
 import factoryImg from "@/assets/factory.jpg";
 import { industriesDetail } from "@/lib/catalog";
@@ -245,6 +248,48 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Tape finder */}
+      <section className="border-y border-border bg-surface">
+        <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+          <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+            <div className="min-w-0">
+              <p className="eyebrow text-accent">Three questions</p>
+              <h2 className="mt-4 max-w-2xl text-4xl leading-[1.02] md:text-6xl">
+                Not sure which tape? Let us pick it for you.
+              </h2>
+            </div>
+            <Link href="/contact" className="inline-flex shrink-0 items-center gap-2 font-bold text-accent">
+              Rather just talk? <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <Reveal className="mt-12">
+            <TapeFinder />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Design studio */}
+      <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+          <div className="min-w-0">
+            <p className="eyebrow text-accent">Colour &amp; print studio</p>
+            <h2 className="mt-4 max-w-2xl text-4xl leading-[1.02] md:text-6xl">
+              See your tape on the carton before you order it
+            </h2>
+            <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">
+              Pick a shade, drop in your brand name, choose a print layout, the mock-up updates
+              live. Send it across and we&apos;ll come back with a price and a physical proof roll.
+            </p>
+          </div>
+          <Link href="/designs" className="inline-flex shrink-0 items-center gap-2 font-bold text-accent">
+            All designs &amp; shades <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <Reveal className="mt-12">
+          <TapeDesignStudio />
+        </Reveal>
+      </section>
+
       {/* Configurator */}
       <section className="ink-panel relative overflow-hidden">
         <div className="grid-lines absolute inset-0 opacity-25" aria-hidden />
@@ -253,10 +298,10 @@ export default function Home() {
             <div className="min-w-0">
               <p className="eyebrow text-accent">Price it yourself</p>
               <h2 className="mt-4 max-w-2xl text-4xl leading-[1.02] text-ink-foreground md:text-6xl">
-                Tape is sold by weight. Here is the maths, live.
+                Every roll is priced by size and micron. Here is the maths, live.
               </h2>
             </div>
-            <Link href="/configurator" className="inline-flex shrink-0 items-center gap-2 font-bold text-accent">
+            <Link href="/resources/configurator" className="inline-flex shrink-0 items-center gap-2 font-bold text-accent">
               Full configurator <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -294,14 +339,14 @@ export default function Home() {
               A chiller and a container need different tape
             </h2>
           </div>
-          <Link href="/industries" className="inline-flex shrink-0 items-center gap-2 font-bold text-accent">
+          <Link href="/products/industries" className="inline-flex shrink-0 items-center gap-2 font-bold text-accent">
             All industries <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
         <div className="mt-12 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {industriesDetail.map((ind, i) => (
             <Reveal key={ind.slug} delay={i * 60} className="bg-background">
-              <Link href={`/industries/${ind.slug}`} className="group flex h-full flex-col p-7">
+              <Link href={`/products/industries/${ind.slug}`} className="group flex h-full flex-col p-7">
                 <span className="font-mono text-[0.62rem] uppercase tracking-widest text-accent">{ind.kicker}</span>
                 <h3 className="mt-3 text-xl">{ind.name}</h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{ind.summary}</p>
@@ -317,6 +362,39 @@ export default function Home() {
 
       <CaseStudies />
       <CertStrip />
+
+      {/* Callback capture */}
+      <section className="ink-panel relative overflow-hidden">
+        <div className="grid-lines absolute inset-0 opacity-25" aria-hidden />
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-20 md:py-28 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-center">
+          <Reveal>
+            <p className="eyebrow rule-red text-accent">Talk to the plant</p>
+            <h2 className="mt-6 text-4xl leading-[1.02] text-ink-foreground md:text-5xl">
+              Most enquiries are answered before the tea goes cold
+            </h2>
+            <p className="mt-5 leading-relaxed text-ink-muted">
+              Leave a number and the person who runs the line calls you back, with the rate, the
+              minimum order and the date the truck leaves Mundka. No forms that disappear into an
+              inbox.
+            </p>
+            <ul className="mt-8 space-y-3 text-sm text-ink-muted">
+              {[
+                "Free sample roll couriered anywhere in India",
+                "GST invoice and e-way bill with every dispatch",
+                "Trial orders from 2 boxes, scale after you test it",
+              ].map((l) => (
+                <li key={l} className="flex items-start gap-3">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                  {l}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={80}>
+            <CallbackCard />
+          </Reveal>
+        </div>
+      </section>
 
       {/* Brands */}
       <section className="border-y border-border bg-surface">

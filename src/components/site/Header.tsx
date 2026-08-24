@@ -12,8 +12,7 @@ const nav = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Products", href: "/products" },
-  { label: "Quality", href: "/quality" },
-  { label: "Configurator", href: "/configurator" },
+  { label: "Designs", href: "/designs" },
   { label: "Resources", href: "/resources" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
@@ -127,7 +126,7 @@ export function Header() {
                           {industriesDetail.map((i) => (
                             <Link
                               key={i.slug}
-                              href={`/industries/${i.slug}`}
+                              href={`/products/industries/${i.slug}`}
                               className="border-b border-border py-2.5 text-sm font-semibold text-foreground/80 transition-colors last:border-0 hover:text-accent"
                             >
                               {i.name}
@@ -143,7 +142,7 @@ export function Header() {
                           indicative price before you call.
                         </p>
                         <Link
-                          href="/configurator"
+                          href="/resources/configurator"
                           className="mt-6 inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-bold text-accent-foreground"
                         >
                           Open the configurator
@@ -217,7 +216,7 @@ export function Header() {
             {industriesDetail.map((i) => (
               <Link
                 key={i.slug}
-                href={`/industries/${i.slug}`}
+                href={`/products/industries/${i.slug}`}
                 onClick={() => setOpen(false)}
                 className="border-b border-border py-3 text-sm font-semibold text-foreground/80"
               >
@@ -225,7 +224,7 @@ export function Header() {
               </Link>
             ))}
           </div>
-          <Link href="/faq" onClick={() => setOpen(false)} className="mt-6 inline-block text-sm font-bold text-accent">
+          <Link href="/resources/faq" onClick={() => setOpen(false)} className="mt-6 inline-block text-sm font-bold text-accent">
             FAQs
           </Link>
           <a

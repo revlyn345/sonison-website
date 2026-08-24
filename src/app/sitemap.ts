@@ -9,13 +9,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, priority: 1.0 },
     { url: `${siteUrl}/about`, priority: 0.8 },
+    { url: `${siteUrl}/about/quality`, priority: 0.7 },
     { url: `${siteUrl}/products`, priority: 0.9 },
-    { url: `${siteUrl}/quality`, priority: 0.7 },
-    { url: `${siteUrl}/industries`, priority: 0.8 },
-    { url: `${siteUrl}/configurator`, priority: 0.8 },
+    { url: `${siteUrl}/products/industries`, priority: 0.8 },
+    { url: `${siteUrl}/designs`, priority: 0.8 },
     { url: `${siteUrl}/resources`, priority: 0.7 },
+    { url: `${siteUrl}/resources/configurator`, priority: 0.8 },
+    { url: `${siteUrl}/resources/faq`, priority: 0.7 },
     { url: `${siteUrl}/blog`, priority: 0.6 },
-    { url: `${siteUrl}/faq`, priority: 0.7 },
     { url: `${siteUrl}/contact`, priority: 0.7 },
   ];
 
@@ -25,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const industryRoutes: MetadataRoute.Sitemap = industriesDetail.map((i) => ({
-    url: `${siteUrl}/industries/${i.slug}`,
+    url: `${siteUrl}/products/industries/${i.slug}`,
     priority: 0.7,
   }));
 

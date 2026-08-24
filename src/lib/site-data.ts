@@ -12,7 +12,7 @@ export const company = {
   since: 1995,
   address: "Plot No. 20, Road No. 7, Mundka Industrial Area, New Delhi - 110041",
   mapUrl: "https://maps.app.goo.gl/t21QdFJmWSztGh269",
-  email: "hello@sonisonpackaging.in",
+  email: "hello@sonisonpackaging.com",
   phones: ["+91 8802 750 750", "+91 8802 850 850"] as const,
   whatsapp: "https://wa.me/918802750750",
   brands: ["Pack Me", "Winpack"],
