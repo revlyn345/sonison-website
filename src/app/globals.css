@@ -328,3 +328,81 @@
     display: none;
   }
 }
+
+/* Styles raw HTML blog content from WordPress to match the rest of the
+   design system, since that content arrives as plain <h2>/<p>/<ul> tags
+   with no classes of their own. */
+@utility prose-article {
+  color: var(--color-foreground);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+
+  & > * + * {
+    margin-top: 1.25em;
+  }
+
+  & h2 {
+    margin-top: 2em;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  & h3 {
+    margin-top: 1.75em;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  & p {
+    color: var(--color-muted-foreground);
+  }
+
+  & strong {
+    color: var(--color-foreground);
+    font-weight: 700;
+  }
+
+  & ul,
+  & ol {
+    padding-left: 1.25em;
+    color: var(--color-muted-foreground);
+  }
+
+  & ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  & ul > li {
+    position: relative;
+    padding-left: 1.5em;
+  }
+
+  & ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent);
+  }
+
+  & ol {
+    list-style: decimal;
+  }
+
+  & li + li {
+    margin-top: 0.5em;
+  }
+
+  & a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

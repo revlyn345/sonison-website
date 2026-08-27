@@ -5,6 +5,12 @@ const nextConfig = {
   // the best possible setup for SEO. No extra config needed for that.
   images: {
     formats: ["image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cms.sonisonpackaging.com",
+      },
+    ],
   },
   reactStrictMode: true,
   async redirects() {

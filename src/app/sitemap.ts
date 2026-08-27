@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
 import { products } from "@/lib/site-data";
 import { industriesDetail } from "@/lib/catalog";
+import { getPosts } from "@/lib/wordpress";
 
 // Keep this in sync with `siteUrl` in src/app/layout.tsx.
 const siteUrl = "https://www.sonisonpackaging.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, priority: 1.0 },
     { url: `${siteUrl}/about`, priority: 0.8 },
@@ -30,5 +31,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...productRoutes, ...industryRoutes];
+  // If WordPress is unreachable at build time, getPosts() returns an empty
+  // array rather than throwing, so this never breaks the site's build.
+  const posts = await getPosts();
+  const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
+    url: `${siteUrl}/blog/${p.slug}`,
+    lastModified: p.date,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...productRoutes, ...industryRoutes, ...blogRoutes];
 }
