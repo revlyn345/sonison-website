@@ -73,33 +73,40 @@ function mapPost(p: WpApiPost): WordPressPost {
 /**
  * Fetches published posts, newest first. Returns an empty array (rather than
  * throwing) if the WordPress site is unreachable or returns an error, so a
- * blog outage never breaks the main website's build or page render.
+ * blog outage never breaks the main website's build or page render. Logs the
+ * actual failure reason to the server console either way, so it's visible in
+ * Vercel's function logs instead of failing completely silently.
  */
 export async function getPosts(limit = 50): Promise<WordPressPost[]> {
+  const url = `${WP_URL}/wp-json/wp/v2/posts?per_page=${limit}&_embed=1&status=publish`;
   try {
-    const res = await fetch(
-      `${WP_URL}/wp-json/wp/v2/posts?per_page=${limit}&_embed=1&status=publish`,
-      { next: { revalidate: 1800 } }, // re-check for new articles every 30 minutes
-    );
-    if (!res.ok) return [];
+    const res = await fetch(url, { next: { revalidate: 1800 } }); // re-check every 30 min
+    if (!res.ok) {
+      console.error(`[wordpress] getPosts: WordPress returned ${res.status} for ${url}`);
+      return [];
+    }
     const data = (await res.json()) as WpApiPost[];
+    console.log(`[wordpress] getPosts: fetched ${data.length} post(s) from WordPress`);
     return data.map(mapPost);
-  } catch {
+  } catch (err) {
+    console.error(`[wordpress] getPosts: fetch to ${url} failed:`, err);
     return [];
   }
 }
 
 /** Returns a single post by slug, or null if not found / WordPress unreachable. */
 export async function getPostBySlug(slug: string): Promise<WordPressPost | null> {
+  const url = `${WP_URL}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed=1&status=publish`;
   try {
-    const res = await fetch(
-      `${WP_URL}/wp-json/wp/v2/posts?slug=${encodeURIComponent(slug)}&_embed=1&status=publish`,
-      { next: { revalidate: 1800 } },
-    );
-    if (!res.ok) return null;
+    const res = await fetch(url, { next: { revalidate: 1800 } });
+    if (!res.ok) {
+      console.error(`[wordpress] getPostBySlug("${slug}"): WordPress returned ${res.status}`);
+      return null;
+    }
     const data = (await res.json()) as WpApiPost[];
     return data.length > 0 ? mapPost(data[0]!) : null;
-  } catch {
+  } catch (err) {
+    console.error(`[wordpress] getPostBySlug("${slug}"): fetch failed:`, err);
     return null;
   }
 }
