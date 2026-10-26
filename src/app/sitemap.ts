@@ -34,11 +34,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // If WordPress is unreachable at build time, getPosts() returns an empty
   // array rather than throwing, so this never breaks the site's build.
   const posts = await getPosts();
-  const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
-    url: `${siteUrl}/blog/${p.slug}`,
-    lastModified: p.date,
-    priority: 0.6,
-  }));
+  const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => {
+    // WordPress dates have no timezone (e.g. 2026-10-20T09:00:00), which the sitemap
+    // standard rejects. Converting to a Date makes Next write a valid ISO date.
+    const modified = new Date(p.date);
+    return {
+      url: `${siteUrl}/blog/${p.slug}`,
+      ...(Number.isNaN(modified.getTime()) ? {} : { lastModified: modified }),
+      priority: 0.6,
+    };
+  });
 
   return [...staticRoutes, ...productRoutes, ...industryRoutes, ...blogRoutes];
 }
