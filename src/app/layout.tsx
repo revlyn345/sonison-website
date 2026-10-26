@@ -4,6 +4,8 @@ import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { ScrollProgress } from "@/components/site/ScrollProgress";
+import { AnalyticsEvents } from "@/components/site/AnalyticsEvents";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { company } from "@/lib/site-data";
 
 const archivo = Archivo({
@@ -59,6 +61,12 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Google Analytics 4. Only runs on the live production build, so your own
+  // npm run dev sessions never count as visitors.
+  const gaId =
+    process.env.NODE_ENV === "production"
+      ? (process.env.NEXT_PUBLIC_GA_ID ?? "G-FD2QNP8FQW")
+      : undefined;
   return (
     <html lang="en" className={`${archivo.variable} ${manrope.variable} ${ibmPlexMono.variable}`}>
       <body>
@@ -68,7 +76,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <Footer />
         </div>
+        {gaId && <AnalyticsEvents />}
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }
