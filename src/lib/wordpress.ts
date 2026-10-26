@@ -14,7 +14,7 @@ export type WordPressPost = {
   title: string; // already decoded, plain text
   excerpt: string; // already decoded, tags stripped
   contentHtml: string; // raw HTML, safe to render (our own generated content)
-  featuredImage: { url: string; alt: string } | null;
+  featuredImage: { url: string; cardUrl: string; alt: string } | null;
   categories: string[];
   tags: string[];
 };
@@ -46,7 +46,14 @@ type WpApiPost = {
   excerpt: { rendered: string };
   content: { rendered: string };
   _embedded?: {
-    "wp:featuredmedia"?: { source_url: string; alt_text: string }[];
+    "wp:featuredmedia"?: {
+      source_url: string;
+  alt_text: string;
+  media_details?: { sizes?: Record<string, { source_url: string }> };
+}[];
+    
+
+    
     "wp:term"?: { taxonomy: string; name: string }[][];
   };
 };
@@ -64,7 +71,16 @@ function mapPost(p: WpApiPost): WordPressPost {
     title: decodeEntities(stripTags(p.title.rendered)),
     excerpt: decodeEntities(stripTags(p.excerpt.rendered)),
     contentHtml: p.content.rendered,
-    featuredImage: media ? { url: media.source_url, alt: media.alt_text || "" } : null,
+    featuredImage: media
+  ? {
+      url: media.media_details?.sizes?.large?.source_url ?? media.source_url,
+      cardUrl:
+        media.media_details?.sizes?.medium_large?.source_url ??
+        media.media_details?.sizes?.large?.source_url ??
+        media.source_url,
+      alt: media.alt_text || "",
+    }
+  : null,
     categories,
     tags,
   };

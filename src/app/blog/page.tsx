@@ -59,10 +59,11 @@ export default async function BlogIndex() {
                   {post.featuredImage && (
                     <div className="tape-sheen aspect-[16/10] overflow-hidden">
                       <Image
-                        src={post.featuredImage.url}
+                        src={post.featuredImage.cardUrl}
                         alt={post.featuredImage.alt || post.title}
                         width={640}
                         height={400}
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
